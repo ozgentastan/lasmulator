@@ -16,21 +16,26 @@ const Title = () => {
 const TargetUpgrade = () => {
 	const [validNumberState, setValidNumberState] = useState(false);
 
+	let gearCount = React.createRef();
+
 	const validateNumberInput = (input) => {
-    console.log(Number.isInteger(+input));
-		setValidNumberState(Number.isInteger(+input)); 
+		console.log(Number.isInteger(+input));
+		setValidNumberState(Number.isInteger(+input));
 	};
 
-  const handleSubmit = (e) => {
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		e.stopPropagation();
 
-  }
+		console.log(gearCount);
+	}
 
 	return (
 		<Container className="target-upgrade">
-			<Form>
+			<Form onSubmit={handleSubmit}>
 				<Row>
 					<Col>
-						<Form.Select id="gearType" aria-label="Select gear type">
+						<Form.Select id="gearType" aria-label="Select gear type" >
 							<option value={GearTypes.armor1302}>{GearTypes.armor1302}</option>
 							<option value={GearTypes.weapon1302}>{GearTypes.weapon1302}</option>
 						</Form.Select>
@@ -67,20 +72,21 @@ const TargetUpgrade = () => {
 						<Form.Control
 							type="number"
 							placeholder="Number of gear pieces"
-              step={1}
-              min={1}
-              max={100}
+							step={1}
+							min={1}
+							max={100}
 							onChange={e => validateNumberInput(e.target.value)}
-              isInvalid={!validNumberState}
+							isInvalid={!validNumberState}
+							ref={gearCount}
 						/>
 					</Col>
 				</Row>
-        <Row>
-          <Col>
-          <Button type="submit" size="sm">Add</Button>
-          <Button type="reset" size="sm">Reset</Button>
-          </Col>
-        </Row>
+				<Row>
+					<Col>
+						<Button type="submit" size="sm">Add</Button>
+						<Button type="reset" size="sm">Reset</Button>
+					</Col>
+				</Row>
 			</Form>
 		</Container>
 	);
