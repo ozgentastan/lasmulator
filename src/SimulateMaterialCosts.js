@@ -1,16 +1,4 @@
-const weaponInfo = {
-    7: {
-        baseSuccessRate: 0.6
-    },
-    9: {
-        baseSuccessRate: 0.3,
-        shards: 258
-    },
-    15: {
-        baseSuccessRate: 0.1,
-        shards: 380
-    }
-}
+import { honingInfoEarlyT3 } from "./RawData/honingCosts";
 
 const secondAttempt = (baseRate) => {
     const result = baseRate + (0.1*baseRate);
@@ -35,7 +23,7 @@ const simulate = () => {
         }
 
         simResults.forEach(attempts => {
-            totalCost = totalCost + attempts * weaponInfo[targetLevel].shards;
+            totalCost = totalCost + attempts * honingInfoEarlyT3[targetLevel].shards;
         });
 
         console.log(totalCost / 1000);
@@ -48,7 +36,7 @@ const simulateUpgrade = (targetLevel) => {
     let successRate;
     while (!isUpgraded) {
         let random = Math.floor(Math.random() * 1000 + 1);
-        let baseRate = weaponInfo[targetLevel].baseSuccessRate;
+        let baseRate = honingInfoEarlyT3[targetLevel].baseSuccessRate;
 
         if(attemptCounts == 1) {
             successRate = baseRate;
