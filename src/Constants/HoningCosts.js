@@ -1,6 +1,11 @@
 export const honingInfoEarlyT3 = {
     7: {
         baseSuccessRate: 0.6,
+        successRateIncreasePerAttempt: 0.06,
+        maxAttempts: 5,
+        solarGraceIncrease: 0.0125,
+        solarBlessingIncrease: 0.025,
+        solarProtectionIncrease: 0.075,
         weapon: {
             stones: 258,
             shardsPerUpgrade: 1272,
@@ -22,6 +27,11 @@ export const honingInfoEarlyT3 = {
     },
     8: {
         baseSuccessRate: 0.45,
+        successRateIncreasePerAttempt: 0.045,
+        maxAttempts: 6,
+        solarGraceIncrease: 0.0125,
+        solarBlessingIncrease: 0.025,
+        solarProtectionIncrease: 0.075,
         weapon: {
             stones: 258,
             shardsPerUpgrade: 1272,
@@ -43,6 +53,11 @@ export const honingInfoEarlyT3 = {
     },
     9: {
         baseSuccessRate: 0.3,
+        successRateIncreasePerAttempt: 0.03,
+        maxAttempts: 7,
+        solarGraceIncrease: 0.0125,
+        solarBlessingIncrease: 0.025,
+        solarProtectionIncrease: 0.075,
         weapon: {
             stones: 258,
             shardsPerUpgrade: 1272,
@@ -64,6 +79,11 @@ export const honingInfoEarlyT3 = {
     },
     10: {
         baseSuccessRate: 0.3,
+        successRateIncreasePerAttempt: 0.03,
+        maxAttempts: 7,
+        solarGraceIncrease: 0.0084,
+        solarBlessingIncrease: 0.0176,
+        solarProtectionIncrease: 0.05,
         weapon: {
             stones: 320,
             shardsPerUpgrade: 1568,
@@ -85,6 +105,11 @@ export const honingInfoEarlyT3 = {
     },
     11: {
         baseSuccessRate: 0.3,
+        successRateIncreasePerAttempt: 0.03,
+        maxAttempts: 7,
+        solarGraceIncrease: 0.0021,
+        solarBlessingIncrease: 0.0042,
+        solarProtectionIncrease: 0.0125,
         weapon: {
             stones: 320,
             shardsPerUpgrade: 1568,
@@ -105,7 +130,12 @@ export const honingInfoEarlyT3 = {
         }
     },
     12: {
-        baseSuccessRate: 0.3,
+        baseSuccessRate: 0.15,
+        successRateIncreasePerAttempt: 0.015,
+        maxAttempts: 11,
+        solarGraceIncrease: 0.0021,
+        solarBlessingIncrease: 0.0042,
+        solarProtectionIncrease: 0.0125,
         weapon: {
             stones: 320,
             shardsPerUpgrade: 1568,
@@ -127,6 +157,11 @@ export const honingInfoEarlyT3 = {
     },
     13: {
         baseSuccessRate: 0.15,
+        successRateIncreasePerAttempt: 0.015,
+        maxAttempts: 11,
+        solarGraceIncrease: 0.0021,
+        solarBlessingIncrease: 0.0042,
+        solarProtectionIncrease: 0.0125,
         weapon: {
             stones: 380,
             shardsPerUpgrade: 1864,
@@ -148,6 +183,11 @@ export const honingInfoEarlyT3 = {
     },
     14: {
         baseSuccessRate: 0.15,
+        successRateIncreasePerAttempt: 0.015,
+        maxAttempts: 11,
+        solarGraceIncrease: 0.0021,
+        solarBlessingIncrease: 0.0042,
+        solarProtectionIncrease: 0.0125,
         weapon: {
             stones: 380,
             shardsPerUpgrade: 1864,
@@ -169,6 +209,12 @@ export const honingInfoEarlyT3 = {
     },
     15: {
         baseSuccessRate: 0.1,
+        successRateIncreasePerAttempt: 0.01,
+        maxSuccessRate: 0.2,
+        maxAttempts: 15,
+        solarGraceIncrease: 0.0021,
+        solarBlessingIncrease: 0.0042,
+        solarProtectionIncrease: 0.0125,
         weapon: {
             stones: 380,
             shardsPerUpgrade: 1864,
