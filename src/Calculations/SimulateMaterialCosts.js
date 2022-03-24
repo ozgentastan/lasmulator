@@ -23,7 +23,7 @@ const calculateExtraHoningChance = (targetLevel, solarGraces = 0, solarBlessings
 	return roundTo(totalChance, 4);
 };
 
-const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, solarProtections, gearType, gearCount }) => {
+const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, solarProtections, gearType, gearCount, increasedChance }) => {
 	const numberOfSimulations = 1000;
 
 	let simResults = {
@@ -47,7 +47,8 @@ const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, sol
 				currentUpgradeTargetLevel,
 				solarGraces,
 				solarBlessings,
-				solarProtections
+				solarProtections,
+				increasedChance
 			);
 			simResults[currentUpgradeTargetLevel] += attemptCount;
 		}
@@ -110,16 +111,19 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 	return costs;
 };
 
-const simulateUpgrade = (targetLevel, solarGraces = 0, solarBlessings = 0, solarProtections = 0) => {
+const simulateUpgrade = (targetLevel, solarGraces = 0, solarBlessings = 0, solarProtections = 0, increasedChance = 0) => {
 	// Multiple fractions with below to work with integers
 	const percentageMultiplier = 10000;
 	let isUpgraded = false;
 	let attemptCount = 1;
+
 	while (!isUpgraded) {
 		let random = Math.floor(Math.random() * percentageMultiplier + 1);
 		let successRate = calculateExtraAttemptChance(targetLevel, attemptCount);
 		successRate += calculateExtraHoningChance(targetLevel, solarGraces, solarBlessings, solarProtections);
 		successRate = roundTo(successRate, 4);
+
+		successRate = increasedChance !== 0 ? successRate + (increasedChance / 100) : successRate;
 
 		isUpgraded = random > successRate * percentageMultiplier ? false : true;
 		!isUpgraded && (isUpgraded = attemptCount >= HONING_INFO_EARLY_T3[targetLevel].maxAttempts);

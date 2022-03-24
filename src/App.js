@@ -77,19 +77,26 @@ const TargetUpgrade = () => {
 	const solarBlessings = useRef(null);
 	const solarGraces = useRef(null);
 	const solarProtections = useRef(null);
+	const increasedChance = useRef(null);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		e.stopPropagation();
 
+		let targetLevelInt = parseInt(targetLevel?.current.value);
+		targetLevelInt = targetLevelInt === 1 ? 7 : targetLevelInt;
+		let startingLevelInt = parseInt(startingLevel?.current.value);
+		startingLevelInt = startingLevelInt === 1 ? 6 : startingLevelInt;
+
 		const simulateInfo = {
 			gearType: gearType?.current.value || GEAR_TYPES.armor1302,
 			gearCount: gearCount?.current.valueAsNumber || 1,
-			startingLevel: +(startingLevel?.current.value) || 6,
-			targetLevel: +(targetLevel?.current.value) || 7,
+			startingLevel: startingLevelInt,
+			targetLevel:  targetLevelInt,
 			solarGraces: solarGraces?.current.valueAsNumber || 0,
 			solarBlessings: solarBlessings?.current.valueAsNumber || 0,
 			solarProtections: solarProtections?.current.valueAsNumber || 0,
+			increasedChance: increasedChance?.current.valueAsNumber || 0,
 		};
 		console.log(startingLevel);
 		console.log(simulateInfo);
@@ -159,7 +166,7 @@ const TargetUpgrade = () => {
 								type="number"
 								placeholder="# of Solar Graces"
 								step={1}
-								min={1}
+								min={0}
 								max={24}
 								ref={solarGraces}
 							/>
@@ -169,7 +176,7 @@ const TargetUpgrade = () => {
 								type="number"
 								placeholder="# of Solar Blessings"
 								step={1}
-								min={1}
+								min={0}
 								max={12}
 								ref={solarBlessings}
 							/>
@@ -179,9 +186,19 @@ const TargetUpgrade = () => {
 								type="number"
 								placeholder="# of Solar Protections"
 								step={1}
-								min={1}
+								min={0}
 								max={4}
 								ref={solarProtections}
+							/>
+						</Col>
+						<Col>
+							<Form.Control
+								type="number"
+								placeholder="Increased Chance"
+								step={1}
+								min={0}
+								max={100}
+								ref={increasedChance}
 							/>
 						</Col>
 					</Row>
