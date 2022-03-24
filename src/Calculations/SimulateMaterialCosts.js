@@ -1,11 +1,13 @@
-import { honingInfoEarlyT3 } from "../Constants/HoningCosts";
+import { HONING_INFO_EARLY_T3 } from "../Constants/HoningCosts";
+import { GOLD_COSTS } from "../Constants/GoldCosts";
+import { GEAR_TYPES } from "../Constants/GearTypes"
 
 //Below calculations are from https://www.easymari.com/en/t3_gear_honing_statistics
 const calculateExtraAttemptChance = (targetLevel, attempts) => {
 	let result =
-		honingInfoEarlyT3[targetLevel].baseSuccessRate +
-		(attempts - 1) * honingInfoEarlyT3[targetLevel].successRateIncreasePerAttempt;
-	let maxSuccessRate = honingInfoEarlyT3[targetLevel].maxSuccessRate || 1;
+		HONING_INFO_EARLY_T3[targetLevel].baseSuccessRate +
+		(attempts - 1) * HONING_INFO_EARLY_T3[targetLevel].successRateIncreasePerAttempt;
+	let maxSuccessRate = HONING_INFO_EARLY_T3[targetLevel].maxSuccessRate || 1;
 	result = result > maxSuccessRate ? maxSuccessRate : result;
 
 	return roundTo(result, 4);
@@ -14,15 +16,15 @@ const calculateExtraAttemptChance = (targetLevel, attempts) => {
 const calculateExtraHoningChance = (targetLevel, solarGraces = 0, solarBlessings = 0, solarProtections = 0) => {
 	let totalChance = 0.0;
 
-	totalChance += solarGraces * honingInfoEarlyT3[targetLevel].solarGraceIncrease;
-	totalChance += solarBlessings * honingInfoEarlyT3[targetLevel].solarBlessingIncrease;
-	totalChance += solarProtections * honingInfoEarlyT3[targetLevel].solarProtectionIncrease;
+	totalChance += solarGraces * HONING_INFO_EARLY_T3[targetLevel].solarGraceIncrease;
+	totalChance += solarBlessings * HONING_INFO_EARLY_T3[targetLevel].solarBlessingIncrease;
+	totalChance += solarProtections * HONING_INFO_EARLY_T3[targetLevel].solarProtectionIncrease;
 
 	return roundTo(totalChance, 4);
 };
 
-const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, solarProtections }) => {
-	const numberOfSimulations = 10000;
+const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, solarProtections, gearType, gearCount }) => {
+	const numberOfSimulations = 1000;
 
 	let simResults = {
 		7: 0,
@@ -53,7 +55,59 @@ const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, sol
 	Object.entries(simResults).forEach(([key, value]) => {
 		simResults[key] = value / numberOfSimulations;
 	});
+
+	simResults = calculateMaterialCosts(simResults, solarGraces, solarBlessings, solarProtections, gearType, gearCount);
+
 	return simResults;
+};
+
+const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarProtections, gearType, gearCount) => {
+
+	gearType = gearType === GEAR_TYPES.armor1302 ? "armor" : "weapon";
+
+	let costs = {
+		stones: 0,
+		shards: 0,
+		gold: 0,
+		silver: 0,
+		leapstones: 0,
+		fusions: 0,
+		solarGraces: 0,
+		solarBlessings: 0,
+		solarProtections: 0,
+		avgAttempts: 0
+	}
+
+	Object.entries(simResults).forEach(([targetLevel, averageAttempts]) => {
+		let honingInfo = HONING_INFO_EARLY_T3[targetLevel][gearType];
+		costs.stones += parseInt(honingInfo.stones * averageAttempts * gearCount);
+		costs.shards += parseInt(honingInfo.shardsPerUpgrade * gearCount);
+		costs.shards += parseInt(honingInfo.shardsPerTry * averageAttempts * gearCount);
+		costs.gold += parseInt(honingInfo.gold * averageAttempts * gearCount);
+		costs.silver += parseInt(honingInfo.silver * averageAttempts * gearCount);
+		costs.leapstones += parseInt(honingInfo.leapstones * averageAttempts * gearCount);
+		costs.fusions += parseInt(honingInfo.fusion * averageAttempts * gearCount);
+		costs.solarGraces += parseInt(solarGraces * averageAttempts * gearCount);
+		costs.solarBlessings += parseInt(solarBlessings * averageAttempts * gearCount);
+		costs.solarProtections += parseInt(solarProtections * averageAttempts * gearCount);
+		costs.avgAttempts += parseInt(averageAttempts);
+	});
+
+	let totalGoldCost = 0;
+
+	Object.entries(costs).forEach(([key, value]) => {
+		if (key === "stones") {
+			totalGoldCost += costs.stones * GOLD_COSTS[gearType];
+		} else if (key === "gold" ){
+			totalGoldCost += costs.gold;
+		} else if (key !== "silver" && key !== "avgAttempts") {
+			totalGoldCost += GOLD_COSTS[key];
+		}
+	});
+
+	costs.totalGoldCost = parseInt(totalGoldCost);
+
+	return costs;
 };
 
 const simulateUpgrade = (targetLevel, solarGraces = 0, solarBlessings = 0, solarProtections = 0) => {
@@ -68,7 +122,7 @@ const simulateUpgrade = (targetLevel, solarGraces = 0, solarBlessings = 0, solar
 		successRate = roundTo(successRate, 4);
 
 		isUpgraded = random > successRate * percentageMultiplier ? false : true;
-		!isUpgraded && (isUpgraded = attemptCount >= honingInfoEarlyT3[targetLevel].maxAttempts);
+		!isUpgraded && (isUpgraded = attemptCount >= HONING_INFO_EARLY_T3[targetLevel].maxAttempts);
 		!isUpgraded && attemptCount++;
 	}
 

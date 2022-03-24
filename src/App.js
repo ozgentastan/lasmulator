@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
-import { GearTypes } from "./Constants/GearConstants";
+import { GEAR_TYPES } from "./Constants/GearTypes";
 import Form from "react-bootstrap/Form";
 import { Row, Col } from "react-bootstrap";
 import { simulate } from "./Calculations/SimulateMaterialCosts";
-import { honingInfoEarlyT3 } from "./Constants/HoningCosts";
+import { HONING_INFO_EARLY_T3 } from "./Constants/HoningCosts";
+import BootstrapTable from "react-bootstrap-table-next";
 
 const Title = () => {
 	return (
@@ -15,50 +16,60 @@ const Title = () => {
 	);
 };
 
-const MaterialCosts = ({simResults, gearType}) => {
-	
-	gearType = gearType === GearTypes.armor1302 ? "armor" : "weapon";
-
-	let stones = 0;
-	let shards = 0;
-	let gold = 0;
-	let silver = 0;
-	let leapstones = 0;
-	let fusions = 0;
-	let totalSolarGraces = 0;
-	let totalSolarBlessings = 0;
-	let totalsolarProtetions = 0;
-
-	Object.entries(simResults).forEach(([targetLevel, averageAttempts]) => {
-		let honingInfo = honingInfoEarlyT3[targetLevel][gearType];
-		stones += honingInfo.stones * averageAttempts;
-		shards += honingInfo.shardsPerUpgrade;
-		shards += honingInfo.shardsPerTry * averageAttempts;
-		gold += honingInfo.gold * averageAttempts;
-		silver += honingInfo.silver * averageAttempts;
-		leapstones += honingInfo.leapstones * averageAttempts;
-		fusions += honingInfo.fusion * averageAttempts;
-		// totalSolarGraces += solarGraces * averageAttempts;
-		// totalSolarBlessings += solarBlessings * averageAttempts;
-		// totalsolarProtetions += solarProtections * averageAttempts;
-	});
+const MaterialTable = ({ simResultsArray }) => {
+	const columns = [{
+		dataField: 'name',
+		text: 'Gear'
+	}, {
+		dataField: 'stones',
+		text: 'Stones'
+	},
+	{
+		dataField: 'gold',
+		text: 'Gold'
+	},
+	{
+		dataField: 'shards',
+		text: 'Shards'
+	},
+	{
+		dataField: 'leapstones',
+		text: 'Leapstones'
+	},
+	{
+		dataField: 'fusions',
+		text: 'Fusions'
+	},
+	{
+		dataField: 'solarGraces',
+		text: 'Graces'
+	},
+	{
+		dataField: 'solarBlessings',
+		text: 'Blessings'
+	},
+	{
+		dataField: 'solarProtections',
+		text: 'Protections'
+	},
+	{
+		dataField: 'totalGoldCost',
+		text: 'Total Gold'
+	},
+	{
+		dataField: 'avgAttempts',
+		text: 'AVG Attempts'
+	}];
 
 	return (
-		<Container className="material-costs">
-			<b>Stones:</b> {stones} <br/>
-			<b>Shards:</b> {shards} <br/>
-			<b>Gold:</b> {gold} <br/>
-			<b>Silver:</b> {silver} <br/>
-			<b>Leapstones:</b> {leapstones} <br/>
-			<b>Fusions:</b> {fusions} <br/>
-		</Container>
+		<BootstrapTable keyField="name" data={simResultsArray} columns={columns} />
 	);
 };
 
 const TargetUpgrade = () => {
 	// const [validNumberState, setValidNumberState] = useState(false);
-	const [simResultsState, setSimResultsState] = useState();
-	const [gearTypeState, setGearTypeState] = useState(GearTypes.armor1302)
+	const [simResultsState, setSimResultsState] = useState([]);
+	// const [GEAR_TYPEState, setGEAR_TYPEState] = useState(GEAR_TYPES.armor1302)
 
 	let gearType = React.createRef();
 	let gearCount = React.createRef();
@@ -68,39 +79,38 @@ const TargetUpgrade = () => {
 	let solarGraces = React.createRef();
 	let solarProtections = React.createRef();
 
-	const validateNumberInput = (input) => {
-		console.log(Number.isInteger(+input));
-		// setValidNumberState(Number.isInteger(+input));
-	};
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		e.stopPropagation();
 
 		const simulateInfo = {
-			startingLevel: startingLevel.current.value || 6,
-			targetLevel: targetLevel.current.value || 7,
-			solarGraces: solarGraces.current.valueAsNumber || 0,
-			solarBlessings: solarBlessings.current.valueAsNumber || 0,
-			solarProtections: solarProtections.current.valueAsNumber || 0,
+			gearType: gearType?.current.value || GEAR_TYPES.armor1302,
+			gearCount: gearCount?.current.valueAsNumber || 1,
+			startingLevel: startingLevel.current?.valueAsNumber || 6,
+			targetLevel: targetLevel?.current.valueAsNumber || 7,
+			solarGraces: solarGraces?.current.valueAsNumber || 0,
+			solarBlessings: solarBlessings?.current.valueAsNumber || 0,
+			solarProtections: solarProtections?.current.valueAsNumber || 0,
 		};
 
-		let simResults = {};
-		simResults = simulate(simulateInfo);
+		let simResults = [...simResultsState];
+		simResults.push(simulate(simulateInfo));
 		setSimResultsState(simResults);
 	};
+
+	const handleReset = (e) => {
+		setSimResultsState([]);
+	}
 
 	return (
 		<>
 			<Container className="target-upgrade">
-				<Form noValidate onSubmit={handleSubmit}>
+				<Form noValidate onSubmit={handleSubmit} onReset={handleReset}>
 					<Row>
 						<Col>
-							<Form.Select id="gearType" aria-label="Select gear type" onChange={e => {
-								setGearTypeState(e.target.value)
-							}}>
-								<option value={GearTypes.armor1302}>{GearTypes.armor1302}</option>
-								<option value={GearTypes.weapon1302}>{GearTypes.weapon1302}</option>
+							<Form.Select id="gearType" aria-label="Select gear type" ref={gearType}>
+								<option value={GEAR_TYPES.armor1302}>{GEAR_TYPES.armor1302}</option>
+								<option value={GEAR_TYPES.weapon1302}>{GEAR_TYPES.weapon1302}</option>
 							</Form.Select>
 						</Col>
 						<Col>
@@ -186,12 +196,9 @@ const TargetUpgrade = () => {
 					</Row>
 				</Form>
 			</Container>
-			{simResultsState && (
+			{simResultsState.length > 0 && (
 				<Container>
-					<MaterialCosts
-						simResults={simResultsState}
-						gearType={gearTypeState}
-					/>
+					<MaterialTable simResultsArray={simResultsState} />
 				</Container>
 			)}
 		</>

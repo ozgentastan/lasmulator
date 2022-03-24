@@ -1,4 +1,4 @@
-export const honingInfoEarlyT3 = {
+export const HONING_INFO_EARLY_T3 = {
     7: {
         baseSuccessRate: 0.6,
         successRateIncreasePerAttempt: 0.06,
