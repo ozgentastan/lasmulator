@@ -102,7 +102,8 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 		} else if (key === "gold" ){
 			totalGoldCost += costs.gold;
 		} else if (key !== "silver" && key !== "avgAttempts") {
-			totalGoldCost += GOLD_COSTS[key];
+			totalGoldCost += GOLD_COSTS[key] * costs[key];
+			console.log()
 		}
 	});
 
