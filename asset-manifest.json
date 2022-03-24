@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/lasmulator/static/css/main.8da4a436.css",
-    "main.js": "/lasmulator/static/js/main.3cdffcbb.js",
+    "main.js": "/lasmulator/static/js/main.d064daed.js",
     "static/js/787.173afc14.chunk.js": "/lasmulator/static/js/787.173afc14.chunk.js",
     "index.html": "/lasmulator/index.html",
     "main.8da4a436.css.map": "/lasmulator/static/css/main.8da4a436.css.map",
-    "main.3cdffcbb.js.map": "/lasmulator/static/js/main.3cdffcbb.js.map",
+    "main.d064daed.js.map": "/lasmulator/static/js/main.d064daed.js.map",
     "787.173afc14.chunk.js.map": "/lasmulator/static/js/787.173afc14.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.8da4a436.css",
-    "static/js/main.3cdffcbb.js"
+    "static/js/main.d064daed.js"
   ]
 }
