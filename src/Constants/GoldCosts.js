@@ -1,10 +1,10 @@
 export const GOLD_COSTS = {
-    weapon: 7,
-    armor: 5.4,
-    leapstones: 110,
-    shards: 0.14,
-    fusions: 1,
-    solarGraces: 65,
-    solarBlessings: 220,
-    solarProtections: 530
+    weapon: 1.7,
+    armor: 1.5,
+    leapstones: 60,
+    shards: 0.08,
+    fusions: 8,
+    solarGraces: 34,
+    solarBlessings: 130,
+    solarProtections: 280
 };

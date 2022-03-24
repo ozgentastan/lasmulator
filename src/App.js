@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import { GEAR_TYPES } from "./Constants/GearTypes";
 import Form from "react-bootstrap/Form";
 import { Row, Col } from "react-bootstrap";
 import { simulate } from "./Calculations/SimulateMaterialCosts";
-import { HONING_INFO_EARLY_T3 } from "./Constants/HoningCosts";
 import BootstrapTable from "react-bootstrap-table-next";
 
 const Title = () => {
@@ -71,13 +70,13 @@ const TargetUpgrade = () => {
 	const [simResultsState, setSimResultsState] = useState([]);
 	// const [GEAR_TYPEState, setGEAR_TYPEState] = useState(GEAR_TYPES.armor1302)
 
-	let gearType = React.createRef();
-	let gearCount = React.createRef();
-	let startingLevel = React.createRef();
-	let targetLevel = React.createRef();
-	let solarBlessings = React.createRef();
-	let solarGraces = React.createRef();
-	let solarProtections = React.createRef();
+	const gearType = useRef(null);
+	const gearCount = useRef(null);
+	const startingLevel = useRef(null);
+	const targetLevel = useRef(null);
+	const solarBlessings = useRef(null);
+	const solarGraces = useRef(null);
+	const solarProtections = useRef(null);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -86,12 +85,14 @@ const TargetUpgrade = () => {
 		const simulateInfo = {
 			gearType: gearType?.current.value || GEAR_TYPES.armor1302,
 			gearCount: gearCount?.current.valueAsNumber || 1,
-			startingLevel: startingLevel.current?.valueAsNumber || 6,
-			targetLevel: targetLevel?.current.valueAsNumber || 7,
+			startingLevel: +(startingLevel?.current.value) || 6,
+			targetLevel: +(targetLevel?.current.value) || 7,
 			solarGraces: solarGraces?.current.valueAsNumber || 0,
 			solarBlessings: solarBlessings?.current.valueAsNumber || 0,
 			solarProtections: solarProtections?.current.valueAsNumber || 0,
 		};
+		console.log(startingLevel);
+		console.log(simulateInfo);
 
 		let simResults = [...simResultsState];
 		simResults.push(simulate(simulateInfo));

@@ -83,14 +83,14 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 		costs.stones += parseInt(honingInfo.stones * averageAttempts * gearCount);
 		costs.shards += parseInt(honingInfo.shardsPerUpgrade * gearCount);
 		costs.shards += parseInt(honingInfo.shardsPerTry * averageAttempts * gearCount);
-		costs.gold += parseInt(honingInfo.gold * averageAttempts * gearCount);
+		costs.gold += parseInt(honingInfo.gold * averageAttempts * gearCount * 0.3);
 		costs.silver += parseInt(honingInfo.silver * averageAttempts * gearCount);
 		costs.leapstones += parseInt(honingInfo.leapstones * averageAttempts * gearCount);
 		costs.fusions += parseInt(honingInfo.fusion * averageAttempts * gearCount);
 		costs.solarGraces += parseInt(solarGraces * averageAttempts * gearCount);
 		costs.solarBlessings += parseInt(solarBlessings * averageAttempts * gearCount);
 		costs.solarProtections += parseInt(solarProtections * averageAttempts * gearCount);
-		costs.avgAttempts += parseInt(averageAttempts);
+		costs.avgAttempts += averageAttempts * gearCount;
 	});
 
 	let totalGoldCost = 0;
