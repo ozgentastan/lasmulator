@@ -43,18 +43,14 @@ const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, sol
 		let currentTargetLevel = +targetLevel;
 		for (currentStartingLevel; currentStartingLevel < currentTargetLevel; currentStartingLevel++) {
 			let currentUpgradeTargetLevel = currentStartingLevel + 1;
-			let attemptCount;
-			if(isMax == "true") {
-				attemptCount = HONING_INFO_EARLY_T3[currentUpgradeTargetLevel].maxAttempts;
-			} else {
-				attemptCount = simulateUpgrade(
-					currentUpgradeTargetLevel,
-					solarGraces,
-					solarBlessings,
-					solarProtections,
-					increasedChance
-				);
-			}
+			let attemptCount = simulateUpgrade(
+				currentUpgradeTargetLevel,
+				solarGraces,
+				solarBlessings,
+				solarProtections,
+				increasedChance,
+				isMax
+			);
 			simResults[currentUpgradeTargetLevel] += attemptCount;
 		}
 	}
@@ -92,8 +88,6 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 		avgAttempts: 0
 	}
 
-	console.log(simResults);
-
 	Object.entries(simResults).forEach(([targetLevel, averageAttempts]) => {
 		if (averageAttempts !== 0) {
 			let honingInfo = honingInfoSource[targetLevel][gearType];
@@ -101,9 +95,7 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 
 			costs.stones += parseInt(honingInfo.stones * averageAttempts * gearCount);
 			costs.shards += parseInt(honingInfo.shardsPerUpgrade * gearCount);
-			console.log(costs.shards)
 			costs.shards += parseInt(honingInfo.shardsPerTry * averageAttempts * gearCount);
-			console.log(costs.shards)
 			costs.gold += parseInt(honingInfo.gold * averageAttempts * gearCount);
 			costs.silver += parseInt(honingInfo.silver * averageAttempts * gearCount);
 			costs.leapstones += parseInt(honingInfo.leapstones * averageAttempts * gearCount);
@@ -133,14 +125,14 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 	return costs;
 };
 
-const simulateUpgrade = (targetLevel, solarGraces = 0, solarBlessings = 0, solarProtections = 0, increasedChance = 0) => {
+const simulateUpgrade = (targetLevel, solarGraces = 0, solarBlessings = 0, solarProtections = 0, increasedChance = 0, isMax = "false") => {
 	// Multiple fractions with below to work with integers
 	const percentageMultiplier = 10000;
 	let isUpgraded = false;
 	let attemptCount = 1;
 
 	while (!isUpgraded) {
-		let random = Math.floor(Math.random() * percentageMultiplier + 1);
+		let random = isMax === "false" ? Math.floor(Math.random() * percentageMultiplier + 1) : percentageMultiplier;
 		let successRate = calculateExtraAttemptChance(targetLevel, attemptCount);
 		successRate += calculateExtraHoningChance(targetLevel, solarGraces, solarBlessings, solarProtections);
 		successRate = roundTo(successRate, 4);
