@@ -66,6 +66,7 @@ const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, sol
 const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarProtections, gearType, gearCount) => {
 
 	let honingInfoSource;
+	let sourceGearType = gearType;
 
 	if (gearType === GEAR_TYPES.armor1302 || GEAR_TYPES.armor1340) {
 		honingInfoSource = gearType === GEAR_TYPES.armor1302 ? HONING_INFO_EARLY_T3 : HONING_INFO_MID_T3;
@@ -91,6 +92,7 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 	Object.entries(simResults).forEach(([targetLevel, averageAttempts]) => {
 		if (averageAttempts !== 0) {
 			let honingInfo = honingInfoSource[targetLevel][gearType];
+			console.log(averageAttempts)
 			averageAttempts = Math.round(averageAttempts);
 
 			costs.stones += parseInt(honingInfo.stones * averageAttempts * gearCount);
@@ -114,9 +116,14 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 			totalGoldCost += costs.stones * GOLD_COSTS[gearType];
 		} else if (key === "gold") {
 			totalGoldCost += costs.gold;
+		} else if (key === "leapstones") {
+			if (sourceGearType === GEAR_TYPES.armor1302 || GEAR_TYPES.weapon1302) {
+				totalGoldCost += costs.leapstones * GOLD_COSTS.leapstones;
+			} else {
+				totalGoldCost += (costs.leapstones * GOLD_COSTS.leapstones) * 5;
+			}
 		} else if (key !== "silver" && key !== "avgAttempts") {
 			totalGoldCost += GOLD_COSTS[key] * costs[key];
-			console.log()
 		}
 	});
 
