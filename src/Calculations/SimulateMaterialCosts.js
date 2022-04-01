@@ -91,7 +91,7 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 	Object.entries(simResults).forEach(([targetLevel, averageAttempts]) => {
 		if (averageAttempts !== 0) {
 			let honingInfo = honingInfoSource[targetLevel][gearType];
-			averageAttempts = Math.ceil(averageAttempts);
+			averageAttempts = Math.round(averageAttempts);
 
 			costs.stones += parseInt(honingInfo.stones * averageAttempts * gearCount);
 			costs.shards += parseInt(honingInfo.shardsPerUpgrade * gearCount);
