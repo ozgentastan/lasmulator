@@ -13,7 +13,7 @@ export const HONING_INFO_EARLY_T3 = {
             silver: 18320,
             gold: 400,
             leapstones: 8,
-            fusion:4
+            fusion: 4
         },
         armor: {
             stones: 156,
@@ -39,7 +39,7 @@ export const HONING_INFO_EARLY_T3 = {
             silver: 19720,
             gold: 400,
             leapstones: 8,
-            fusion:4
+            fusion: 4
         },
         armor: {
             stones: 156,
@@ -233,6 +233,60 @@ export const HONING_INFO_EARLY_T3 = {
             leapstones: 8,
             fusion: 4
         }
+    }, 
+    16: {
+        baseSuccessRate: 0.1,
+        successRateIncreasePerAttempt: 0.01,
+        maxSuccessRate: 0.2,
+        maxAttempts: 15,
+        solarGraceIncrease: 0.0021,
+        solarBlessingIncrease: 0.0042,
+        solarProtectionIncrease: 0.0125,
+        weapon: {
+            stones: 1144,
+            shardsPerUpgrade: 13014,
+            shardsPerTry: 310,
+            silver: 39720,
+            gold: 680,
+            leapstones: 22,
+            fusion: 12
+        },
+        armor: {
+            stones: 686,
+            shardsPerUpgrade: 9178,
+            shardsPerTry: 216,
+            silver: 27820,
+            gold: 350,
+            leapstones: 14,
+            fusion: 10
+        }
+    },
+    17: {
+        baseSuccessRate: 0.1,
+        successRateIncreasePerAttempt: 0.01,
+        maxSuccessRate: 0.2,
+        maxAttempts: 15,
+        solarGraceIncrease: 0.0021,
+        solarBlessingIncrease: 0.0042,
+        solarProtectionIncrease: 0.0125,
+        weapon: {
+            stones: 1144,
+            shardsPerUpgrade: 9696,
+            shardsPerTry: 422,
+            silver: 40580,
+            gold: 680,
+            leapstones: 24,
+            fusion: 14
+        },
+        armor: {
+            stones: 686,
+            shardsPerUpgrade: 12406,
+            shardsPerTry: 292,
+            silver: 28420,
+            gold: 350,
+            leapstones: 16,
+            fusion: 10
+        }
     }
 }
 
@@ -251,7 +305,7 @@ export const HONING_INFO_MID_T3 = {
             silver: 31920,
             gold: 640,
             leapstones: 12,
-            fusion:6
+            fusion: 6
         },
         armor: {
             stones: 404,
@@ -277,7 +331,7 @@ export const HONING_INFO_MID_T3 = {
             silver: 33520,
             gold: 640,
             leapstones: 14,
-            fusion:6
+            fusion: 6
         },
         armor: {
             stones: 404,
@@ -470,6 +524,60 @@ export const HONING_INFO_MID_T3 = {
             gold: 350,
             leapstones: 12,
             fusion: 8
+        }
+    },
+    16: {
+        baseSuccessRate: 0.1,
+        successRateIncreasePerAttempt: 0.01,
+        maxSuccessRate: 0.2,
+        maxAttempts: 15,
+        solarGraceIncrease: 0.0021,
+        solarBlessingIncrease: 0.0042,
+        solarProtectionIncrease: 0.0125,
+        weapon: {
+            stones: 1144,
+            shardsPerUpgrade: 13014,
+            shardsPerTry: 310,
+            silver: 39720,
+            gold: 680,
+            leapstones: 22,
+            fusion: 12
+        },
+        armor: {
+            stones: 686,
+            shardsPerUpgrade: 9178,
+            shardsPerTry: 216,
+            silver: 27820,
+            gold: 350,
+            leapstones: 14,
+            fusion: 10
+        }
+    },
+    17: {
+        baseSuccessRate: 0.1,
+        successRateIncreasePerAttempt: 0.01,
+        maxSuccessRate: 0.2,
+        maxAttempts: 15,
+        solarGraceIncrease: 0.0021,
+        solarBlessingIncrease: 0.0042,
+        solarProtectionIncrease: 0.0125,
+        weapon: {
+            stones: 1144,
+            shardsPerUpgrade: 9696,
+            shardsPerTry: 422,
+            silver: 40580,
+            gold: 680,
+            leapstones: 24,
+            fusion: 14
+        },
+        armor: {
+            stones: 686,
+            shardsPerUpgrade: 12406,
+            shardsPerTry: 292,
+            silver: 28420,
+            gold: 350,
+            leapstones: 16,
+            fusion: 10
         }
     }
 }
