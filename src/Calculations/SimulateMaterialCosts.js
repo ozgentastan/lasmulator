@@ -1,4 +1,4 @@
-import { HONING_INFO_EARLY_T3 } from "../Constants/HoningCosts";
+import { HONING_INFO_EARLY_T3, HONING_INFO_MID_T3 } from "../Constants/HoningCosts";
 import { GOLD_COSTS } from "../Constants/GoldCosts";
 import { GEAR_TYPES } from "../Constants/GearTypes"
 
@@ -23,8 +23,8 @@ const calculateExtraHoningChance = (targetLevel, solarGraces = 0, solarBlessings
 	return roundTo(totalChance, 4);
 };
 
-const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, solarProtections, gearType, gearCount, increasedChance }) => {
-	const numberOfSimulations = 1000;
+const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, solarProtections, gearType, gearCount, increasedChance, isMax }) => {
+	const numberOfSimulations = 10000;
 
 	let simResults = {
 		7: 0,
@@ -43,13 +43,18 @@ const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, sol
 		let currentTargetLevel = +targetLevel;
 		for (currentStartingLevel; currentStartingLevel < currentTargetLevel; currentStartingLevel++) {
 			let currentUpgradeTargetLevel = currentStartingLevel + 1;
-			let attemptCount = simulateUpgrade(
-				currentUpgradeTargetLevel,
-				solarGraces,
-				solarBlessings,
-				solarProtections,
-				increasedChance
-			);
+			let attemptCount;
+			if(isMax == "true") {
+				attemptCount = HONING_INFO_EARLY_T3[currentUpgradeTargetLevel].maxAttempts;
+			} else {
+				attemptCount = simulateUpgrade(
+					currentUpgradeTargetLevel,
+					solarGraces,
+					solarBlessings,
+					solarProtections,
+					increasedChance
+				);
+			}
 			simResults[currentUpgradeTargetLevel] += attemptCount;
 		}
 	}
@@ -64,7 +69,15 @@ const simulate = ({ startingLevel, targetLevel, solarGraces, solarBlessings, sol
 
 const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarProtections, gearType, gearCount) => {
 
-	gearType = gearType === GEAR_TYPES.armor1302 ? "armor" : "weapon";
+	let honingInfoSource;
+
+	if (gearType === GEAR_TYPES.armor1302 || GEAR_TYPES.armor1340) {
+		honingInfoSource = gearType === GEAR_TYPES.armor1302 ? HONING_INFO_EARLY_T3 : HONING_INFO_MID_T3;
+		gearType = "armor";
+	} else {
+		honingInfoSource = gearType === GEAR_TYPES.weapon1302 ? HONING_INFO_EARLY_T3 : HONING_INFO_MID_T3;
+		gearType = "weapon";
+	}
 
 	let costs = {
 		stones: 0,
@@ -79,19 +92,27 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 		avgAttempts: 0
 	}
 
+	console.log(simResults);
+
 	Object.entries(simResults).forEach(([targetLevel, averageAttempts]) => {
-		let honingInfo = HONING_INFO_EARLY_T3[targetLevel][gearType];
-		costs.stones += parseInt(honingInfo.stones * averageAttempts * gearCount);
-		costs.shards += parseInt(honingInfo.shardsPerUpgrade * gearCount);
-		costs.shards += parseInt(honingInfo.shardsPerTry * averageAttempts * gearCount);
-		costs.gold += parseInt(honingInfo.gold * averageAttempts * gearCount * 0.3);
-		costs.silver += parseInt(honingInfo.silver * averageAttempts * gearCount);
-		costs.leapstones += parseInt(honingInfo.leapstones * averageAttempts * gearCount);
-		costs.fusions += parseInt(honingInfo.fusion * averageAttempts * gearCount);
-		costs.solarGraces += parseInt(solarGraces * averageAttempts * gearCount);
-		costs.solarBlessings += parseInt(solarBlessings * averageAttempts * gearCount);
-		costs.solarProtections += parseInt(solarProtections * averageAttempts * gearCount);
-		costs.avgAttempts += averageAttempts * gearCount;
+		if (averageAttempts !== 0) {
+			let honingInfo = honingInfoSource[targetLevel][gearType];
+			averageAttempts = Math.ceil(averageAttempts);
+
+			costs.stones += parseInt(honingInfo.stones * averageAttempts * gearCount);
+			costs.shards += parseInt(honingInfo.shardsPerUpgrade * gearCount);
+			console.log(costs.shards)
+			costs.shards += parseInt(honingInfo.shardsPerTry * averageAttempts * gearCount);
+			console.log(costs.shards)
+			costs.gold += parseInt(honingInfo.gold * averageAttempts * gearCount);
+			costs.silver += parseInt(honingInfo.silver * averageAttempts * gearCount);
+			costs.leapstones += parseInt(honingInfo.leapstones * averageAttempts * gearCount);
+			costs.fusions += parseInt(honingInfo.fusion * averageAttempts * gearCount);
+			costs.solarGraces += parseInt(solarGraces * averageAttempts * gearCount);
+			costs.solarBlessings += parseInt(solarBlessings * averageAttempts * gearCount);
+			costs.solarProtections += parseInt(solarProtections * averageAttempts * gearCount);
+			costs.avgAttempts += averageAttempts * gearCount;
+		}
 	});
 
 	let totalGoldCost = 0;
@@ -99,7 +120,7 @@ const calculateMaterialCosts = (simResults, solarGraces, solarBlessings, solarPr
 	Object.entries(costs).forEach(([key, value]) => {
 		if (key === "stones") {
 			totalGoldCost += costs.stones * GOLD_COSTS[gearType];
-		} else if (key === "gold" ){
+		} else if (key === "gold") {
 			totalGoldCost += costs.gold;
 		} else if (key !== "silver" && key !== "avgAttempts") {
 			totalGoldCost += GOLD_COSTS[key] * costs[key];

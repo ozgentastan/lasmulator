@@ -66,9 +66,7 @@ const MaterialTable = ({ simResultsArray }) => {
 };
 
 const TargetUpgrade = () => {
-	// const [validNumberState, setValidNumberState] = useState(false);
 	const [simResultsState, setSimResultsState] = useState([]);
-	// const [GEAR_TYPEState, setGEAR_TYPEState] = useState(GEAR_TYPES.armor1302)
 
 	const gearType = useRef(null);
 	const gearCount = useRef(null);
@@ -78,6 +76,7 @@ const TargetUpgrade = () => {
 	const solarGraces = useRef(null);
 	const solarProtections = useRef(null);
 	const increasedChance = useRef(null);
+	const isMax = useRef(null);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -92,14 +91,15 @@ const TargetUpgrade = () => {
 			gearType: gearType?.current.value || GEAR_TYPES.armor1302,
 			gearCount: gearCount?.current.valueAsNumber || 1,
 			startingLevel: startingLevelInt,
-			targetLevel:  targetLevelInt,
+			targetLevel: targetLevelInt,
 			solarGraces: solarGraces?.current.valueAsNumber || 0,
 			solarBlessings: solarBlessings?.current.valueAsNumber || 0,
 			solarProtections: solarProtections?.current.valueAsNumber || 0,
 			increasedChance: increasedChance?.current.valueAsNumber || 0,
+			isMax: isMax?.current.value || false
 		};
-		console.log(startingLevel);
-		console.log(simulateInfo);
+
+		console.log(isMax.current);
 
 		let simResults = [...simResultsState];
 		simResults.push(simulate(simulateInfo));
@@ -119,6 +119,8 @@ const TargetUpgrade = () => {
 							<Form.Select id="gearType" aria-label="Select gear type" ref={gearType}>
 								<option value={GEAR_TYPES.armor1302}>{GEAR_TYPES.armor1302}</option>
 								<option value={GEAR_TYPES.weapon1302}>{GEAR_TYPES.weapon1302}</option>
+								<option value={GEAR_TYPES.armor1340}>{GEAR_TYPES.armor1340}</option>
+								<option value={GEAR_TYPES.weapon1340}>{GEAR_TYPES.weapon1340}</option>
 							</Form.Select>
 						</Col>
 						<Col>
@@ -204,6 +206,10 @@ const TargetUpgrade = () => {
 					</Row>
 					<Row>
 						<Col>
+							<Form.Select id="gearType" aria-label="Average Scenario" ref={isMax}>
+								<option value={false}>Average Scenario</option>
+								<option value={true}>Worst Case Scenario</option>
+							</Form.Select>
 							<Button type="submit" size="sm">
 								Add
 							</Button>
